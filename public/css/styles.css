@@ -9,6 +9,8 @@
   --accent: #00e08a;
   --accent-2: #00b37a;
   --accent-dark: #003d35;
+  --money: #f4c542;
+  --money-2: #b88718;
   --teal: #66d9e8;
   --coral: #e76f51;
   --green: #a7f3d0;
@@ -595,8 +597,8 @@ select:focus {
 }
 
 .stat-bg-dinero {
-  color: #021a15;
-  background: linear-gradient(135deg, #00e08a, #008c72);
+  color: #221703;
+  background: linear-gradient(135deg, #f4c542, #b88718);
 }
 
 .stat-bg-vida {
@@ -738,7 +740,7 @@ select:focus {
 }
 
 .stat-dinero .bar span {
-  background: var(--accent);
+  background: var(--money);
 }
 
 .stat-vida .bar span {
@@ -793,9 +795,9 @@ select:focus {
 }
 
 .stat-border-dinero {
-  --option-rgb: 0, 224, 138;
-  --option-rgb-soft: 102, 217, 232;
-  border-color: rgba(0, 224, 138, 0.72);
+  --option-rgb: 244, 197, 66;
+  --option-rgb-soft: 184, 135, 24;
+  border-color: rgba(244, 197, 66, 0.72);
 }
 
 .stat-border-vida {
