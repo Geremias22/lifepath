@@ -1,8 +1,8 @@
 <svg width="240" height="240" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="LifePath mark">
   <rect width="240" height="240" rx="48" fill="#111827"/>
-  <path d="M48 167C78 137 84 96 119 92C154 88 154 144 192 74" stroke="#F4D06F" stroke-width="11" stroke-linecap="round"/>
+  <path d="M48 167C78 137 84 96 119 92C154 88 154 144 192 74" stroke="#00E08A" stroke-width="11" stroke-linecap="round"/>
   <path d="M48 167C79 190 116 194 148 174C171 160 183 136 192 74" stroke="#66D9E8" stroke-width="7" stroke-linecap="round" opacity=".92"/>
-  <circle cx="48" cy="167" r="12" fill="#F4D06F"/>
+  <circle cx="48" cy="167" r="12" fill="#00E08A"/>
   <circle cx="119" cy="92" r="12" fill="#E76F51"/>
   <circle cx="192" cy="74" r="12" fill="#66D9E8"/>
   <circle cx="148" cy="174" r="9" fill="#A7F3D0"/>

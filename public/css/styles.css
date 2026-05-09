@@ -6,7 +6,9 @@
   --text: #f6f1e7;
   --muted: #b9b1a3;
   --line: rgba(255, 255, 255, 0.12);
-  --gold: #f4d06f;
+  --accent: #00e08a;
+  --accent-2: #00b37a;
+  --accent-dark: #003d35;
   --teal: #66d9e8;
   --coral: #e76f51;
   --green: #a7f3d0;
@@ -26,9 +28,9 @@ body {
   color: var(--text);
   background:
     radial-gradient(circle at 12% 8%, rgba(102, 217, 232, 0.18), transparent 28rem),
-    radial-gradient(circle at 84% 18%, rgba(231, 111, 81, 0.18), transparent 24rem),
-    radial-gradient(circle at 52% 92%, rgba(196, 167, 255, 0.14), transparent 30rem),
-    linear-gradient(135deg, #101014 0%, #151c22 45%, #211715 100%);
+    radial-gradient(circle at 84% 18%, rgba(0, 224, 138, 0.16), transparent 24rem),
+    radial-gradient(circle at 52% 92%, rgba(196, 167, 255, 0.13), transparent 30rem),
+    linear-gradient(135deg, #101014 0%, #121f20 46%, #12151f 100%);
 }
 
 button,
@@ -41,15 +43,17 @@ button {
   min-height: 44px;
   border: 0;
   border-radius: 8px;
-  color: #111318;
-  background: var(--gold);
+  color: #021a15;
+  background: linear-gradient(135deg, var(--accent), #6dffbf);
   font-weight: 800;
   cursor: pointer;
-  transition: transform 160ms ease, opacity 160ms ease, background 160ms ease;
+  box-shadow: 0 10px 28px rgba(0, 224, 138, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.42);
+  transition: transform 160ms ease, opacity 160ms ease, background 160ms ease, box-shadow 160ms ease;
 }
 
 button:hover {
   transform: translateY(-1px);
+  box-shadow: 0 16px 34px rgba(0, 224, 138, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.48);
 }
 
 button:disabled {
@@ -62,6 +66,7 @@ button.secondary {
   color: var(--text);
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid var(--line);
+  box-shadow: none;
 }
 
 input,
@@ -200,10 +205,11 @@ select:focus {
   align-items: center;
   min-height: 48px;
   padding: 0 16px;
-  border: 1px solid rgba(244, 208, 111, 0.4);
+  border: 1px solid rgba(0, 224, 138, 0.42);
   border-radius: 8px;
-  color: var(--gold);
-  background: rgba(244, 208, 111, 0.08);
+  color: var(--accent);
+  background: rgba(0, 224, 138, 0.09);
+  box-shadow: 0 0 24px rgba(0, 224, 138, 0.08);
   font-size: 1.45rem;
   font-weight: 900;
   letter-spacing: 0.12em;
@@ -290,11 +296,11 @@ select:focus {
   height: 76px;
   border: 2px solid rgba(255, 255, 255, 0.28);
   border-radius: 8px;
-  color: #fff7d6;
+  color: #ddfff4;
   background:
     radial-gradient(circle at 30% 24%, rgba(255, 255, 255, 0.18), transparent 34px),
-    linear-gradient(135deg, rgba(244, 208, 111, 0.26), rgba(196, 167, 255, 0.16));
-  box-shadow: inset 0 0 22px rgba(255, 255, 255, 0.08), 0 14px 30px rgba(0, 0, 0, 0.28);
+    linear-gradient(135deg, rgba(0, 224, 138, 0.26), rgba(102, 217, 232, 0.18), rgba(196, 167, 255, 0.14));
+  box-shadow: inset 0 0 22px rgba(255, 255, 255, 0.08), 0 14px 30px rgba(0, 0, 0, 0.28), 0 0 22px rgba(0, 224, 138, 0.16);
   font-size: 2.1rem;
   font-weight: 950;
 }
@@ -360,12 +366,12 @@ select:focus {
   color: #151319;
   background:
     radial-gradient(circle at 24% 18%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.22) 24%, transparent 28%),
-    linear-gradient(135deg, #fff4a8 0%, #f4d06f 34%, #66d9e8 72%, #c4a7ff 100%);
+    linear-gradient(135deg, #dffff4 0%, #00e08a 34%, #66d9e8 72%, #c4a7ff 100%);
   box-shadow:
     inset 0 0 22px rgba(255, 255, 255, 0.52),
     inset 0 -12px 24px rgba(24, 18, 36, 0.2),
     0 14px 30px rgba(0, 0, 0, 0.34),
-    0 0 24px rgba(102, 217, 232, 0.22);
+    0 0 26px rgba(0, 224, 138, 0.3);
 }
 
 .dice-face i {
@@ -552,7 +558,7 @@ select:focus {
 .board-cell.is-active {
   outline: 3px solid rgba(255, 255, 255, 0.8);
   outline-offset: 2px;
-  box-shadow: 0 0 0 5px rgba(244, 208, 111, 0.22), 0 18px 38px rgba(0, 0, 0, 0.32);
+  box-shadow: 0 0 0 5px rgba(0, 224, 138, 0.24), 0 18px 38px rgba(0, 0, 0, 0.32), 0 0 28px rgba(0, 224, 138, 0.18);
   transform: translateY(-2px) scale(1.02);
 }
 
@@ -582,15 +588,15 @@ select:focus {
   border: 1px solid rgba(255, 255, 255, 0.75);
   border-radius: 50%;
   color: #111318;
-  background: #fff7d6;
+  background: #e6fff6;
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.55), 0 0 16px var(--token-glow, #c4a7ff);
   font-size: 0.72rem;
   font-weight: 950;
 }
 
 .stat-bg-dinero {
-  color: #19150b;
-  background: linear-gradient(135deg, #f4d06f, #d8a92d);
+  color: #021a15;
+  background: linear-gradient(135deg, #00e08a, #008c72);
 }
 
 .stat-bg-vida {
@@ -661,17 +667,35 @@ select:focus {
 }
 
 .option-button {
+  position: relative;
   width: 100%;
   min-height: 64px;
   padding: 14px 16px;
   color: var(--text);
   text-align: left;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--line);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.035)),
+    rgba(0, 224, 138, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.option-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 16% 0%, rgba(0, 224, 138, 0.18), transparent 32%),
+    linear-gradient(90deg, rgba(0, 224, 138, 0.16), transparent 48%);
+  opacity: 0.78;
+  pointer-events: none;
 }
 
 .option-button:hover {
-  background: rgba(244, 208, 111, 0.16);
+  background:
+    linear-gradient(135deg, rgba(0, 224, 138, 0.18), rgba(102, 217, 232, 0.1)),
+    rgba(255, 255, 255, 0.08);
+  box-shadow: 0 18px 42px rgba(0, 224, 138, 0.18), 0 0 0 1px rgba(0, 224, 138, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .option-button:disabled {
@@ -708,11 +732,11 @@ select:focus {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, var(--coral), var(--gold), var(--teal));
+  background: linear-gradient(90deg, var(--coral), var(--accent), var(--teal));
 }
 
 .stat-dinero .bar span {
-  background: var(--gold);
+  background: var(--accent);
 }
 
 .stat-vida .bar span {
@@ -763,11 +787,11 @@ select:focus {
 }
 
 .done {
-  background: var(--gold);
+  background: var(--accent);
 }
 
 .stat-border-dinero {
-  border-color: rgba(244, 208, 111, 0.65);
+  border-color: rgba(0, 224, 138, 0.72);
 }
 
 .stat-border-vida {
