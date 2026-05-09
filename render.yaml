@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: lifepath-backend
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: LLM_PROVIDER
+        value: gemini
+      - key: GEMINI_MODEL
+        value: gemini-2.5-flash-lite
+      - key: LLM_GENERATE_CONSEQUENCES
+        value: true
+      - key: LLM_GENERATE_FINALS
+        value: true
+      - key: CORS_ORIGIN
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LifePath</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav class="topbar">
+        <a class="brand" href="/">
+          <img src="/assets/lifepath-mark.svg" alt="LifePath" />
+          <span><strong>LifePath</strong><span>Echoes of Life</span></span>
+        </a>
+      </nav>
+
+      <section class="layout">
+        <div>
+          <h1 class="hero-title">LifePath</h1>
+          <p class="hero-copy">
+            Crea una sala, invita a otros jugadores y tomad decisiones simultaneas que transforman vuestra vida, estadisticas y legado final.
+          </p>
+        </div>
+
+        <aside class="panel">
+          <form id="create-form" class="stack">
+            <h2>Crear sala</h2>
+            <input name="playerName" maxlength="24" placeholder="Tu nombre" autocomplete="name" required />
+            <select name="gender" aria-label="Genero" required>
+              <option value="" disabled selected>Elige genero</option>
+              <option value="hombre">Hombre</option>
+              <option value="mujer">Mujer</option>
+              <option value="otro">Otro</option>
+            </select>
+            <select name="maxPlayers">
+              <option value="2">2 jugadores</option>
+              <option value="4">4 jugadores</option>
+              <option value="6" selected>6 jugadores</option>
+            </select>
+            <button type="submit">Crear partida</button>
+          </form>
+
+          <div class="divider"></div>
+
+          <form id="join-form" class="stack">
+            <h2>Unirse</h2>
+            <input name="playerName" maxlength="24" placeholder="Tu nombre" autocomplete="name" required />
+            <select name="gender" aria-label="Genero" required>
+              <option value="" disabled selected>Elige genero</option>
+              <option value="hombre">Hombre</option>
+              <option value="mujer">Mujer</option>
+              <option value="otro">Otro</option>
+            </select>
+            <input name="roomId" maxlength="5" placeholder="Codigo de sala" required />
+            <button class="secondary" type="submit">Entrar en sala</button>
+          </form>
+
+          <p id="notice" class="notice" aria-live="polite"></p>
+        </aside>
+      </section>
+    </main>
+
+    <script src="/js/session.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/socket-loader.js" data-entry="/js/home.js"></script>
+  </body>
+</html>

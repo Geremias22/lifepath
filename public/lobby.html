@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lobby - LifePath</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav class="topbar">
+        <a class="brand" href="/">
+          <img src="/assets/lifepath-mark.svg" alt="LifePath" />
+          <span><strong>LifePath</strong><span>Lobby</span></span>
+        </a>
+      </nav>
+
+      <section class="layout">
+        <div class="panel">
+          <p class="muted">Codigo de sala</p>
+          <div id="room-code" class="room-code">-----</div>
+          <div class="divider"></div>
+          <button id="copy-button" class="secondary" type="button">Copiar codigo</button>
+        </div>
+
+        <aside class="panel">
+          <h1>Jugadores</h1>
+          <div id="players-list" class="player-list"></div>
+          <button id="start-button" type="button" disabled>Esperando al host</button>
+          <p id="lobby-notice" class="notice" aria-live="polite"></p>
+        </aside>
+      </section>
+    </main>
+
+    <script src="/js/session.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/socket-loader.js" data-entry="/js/lobby.js"></script>
+  </body>
+</html>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Partida - LifePath</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <nav class="topbar">
+        <a class="brand" href="/">
+          <img src="/assets/lifepath-mark.svg" alt="LifePath" />
+          <span><strong>LifePath</strong><span>Partida</span></span>
+        </a>
+      </nav>
+
+      <section class="game-layout">
+        <div class="stack">
+          <section class="panel">
+            <div class="board-header">
+              <div>
+                <h2>Tablero vital</h2>
+                <p class="muted">30 posiciones. Cada color marca el tipo de decision que toca al caer.</p>
+              </div>
+              <div class="dice-zone" aria-live="polite">
+                <div id="dice-display" class="dice-display">-</div>
+                <div id="dice-3d" class="dice-3d" aria-hidden="true">
+                  <div class="dice-cube">
+                    <span class="dice-face face-one" data-value="1"><i></i></span>
+                    <span class="dice-face face-two" data-value="2"><i></i><i></i></span>
+                    <span class="dice-face face-three" data-value="3"><i></i><i></i><i></i></span>
+                    <span class="dice-face face-four" data-value="4"><i></i><i></i><i></i><i></i></span>
+                    <span class="dice-face face-five" data-value="5"><i></i><i></i><i></i><i></i><i></i></span>
+                    <span class="dice-face face-six" data-value="6"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="board-grid" class="board-grid"></div>
+          </section>
+
+          <article class="event-card">
+            <div class="event-meta">
+              <span id="stage-label" class="pill">Etapa</span>
+              <span id="round-label" class="pill">Turno</span>
+              <span id="age-label" class="pill">Casilla</span>
+            </div>
+            <h1 id="event-title">Preparando partida</h1>
+            <p id="event-description">Conectando con la sala...</p>
+            <div id="action-loading" class="action-loading hidden" aria-live="polite">
+              <span></span>
+              <strong>Generando consecuencia...</strong>
+            </div>
+            <button id="roll-button" type="button" class="roll-button hidden">Tirar dado</button>
+            <div id="options-grid" class="options-grid"></div>
+            <p id="game-notice" class="notice" aria-live="polite"></p>
+          </article>
+
+          <section id="results-panel" class="panel hidden">
+            <h2>Resultado del turno</h2>
+            <div id="results-list" class="result-list"></div>
+            <div class="divider"></div>
+            <button id="next-turn-button" type="button">Siguiente turno</button>
+          </section>
+
+          <section id="final-panel" class="panel hidden">
+            <h2>Legado final</h2>
+            <div id="final-list" class="result-list"></div>
+          </section>
+        </div>
+
+        <aside class="stack">
+          <section class="panel">
+            <h2>Tus estadisticas</h2>
+            <div id="stats-grid" class="stats-grid"></div>
+          </section>
+
+          <section class="panel">
+            <h2>Jugadores</h2>
+            <div id="players-panel" class="player-list"></div>
+          </section>
+
+          <section id="timeline-panel" class="panel">
+            <h2>Linea temporal</h2>
+            <div id="timeline-list" class="timeline"></div>
+          </section>
+        </aside>
+      </section>
+    </main>
+
+    <script src="/js/session.js"></script>
+    <script src="/js/config.js"></script>
+    <script src="/js/socket-loader.js" data-entry="/js/game.js"></script>
+  </body>
+</html>

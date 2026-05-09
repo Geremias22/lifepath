@@ -1,0 +1,1 @@
+window.LIFEPATH_SOCKET_URL = "";
