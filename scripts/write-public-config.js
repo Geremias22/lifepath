@@ -1,7 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
-const socketUrl = process.env.LIFEPATH_SOCKET_URL || "";
+const defaultSocketUrl = "https://lifepath-backend-4lbj.onrender.com";
+const socketUrl = process.env.LIFEPATH_SOCKET_URL || defaultSocketUrl;
 const target = path.join(__dirname, "..", "public", "js", "config.js");
 const content = `window.LIFEPATH_SOCKET_URL = ${JSON.stringify(socketUrl)};\n`;
 

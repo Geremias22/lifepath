@@ -9,7 +9,7 @@ const registerRoomSocket = require("./sockets/roomSocket");
 dotenv.config({ quiet: true });
 
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || "0.0.0.0";
+const HOST = !process.env.HOST || process.env.HOST === "HOST" ? "0.0.0.0" : process.env.HOST;
 const allowedOrigins = (process.env.CORS_ORIGIN || process.env.FRONTEND_URL || "")
   .split(",")
   .map((origin) => origin.trim())

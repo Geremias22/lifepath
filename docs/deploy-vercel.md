@@ -30,7 +30,7 @@ https://tu-backend/health
 4. Configura en Vercel la variable:
 
 ```env
-LIFEPATH_SOCKET_URL=https://tu-backend
+LIFEPATH_SOCKET_URL=https://lifepath-backend-4lbj.onrender.com
 ```
 
 5. Vercel ejecutara:
@@ -42,7 +42,7 @@ npm run build
 El build genera `public/js/config.js` y el frontend cargara Socket.IO desde:
 
 ```txt
-https://tu-backend/socket.io/socket.io.js
+https://lifepath-backend-4lbj.onrender.com/socket.io/socket.io.js
 ```
 
 6. Copia el dominio final de Vercel y ponlo en el backend:
@@ -68,7 +68,7 @@ CORS_ORIGIN=https://tu-frontend.vercel.app
 Frontend Vercel:
 
 ```env
-LIFEPATH_SOCKET_URL=https://tu-backend
+LIFEPATH_SOCKET_URL=https://lifepath-backend-4lbj.onrender.com
 ```
 
 ## Prueba local con backend externo

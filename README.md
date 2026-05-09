@@ -34,7 +34,7 @@ El juego usa Socket.IO y salas en memoria. Para jugar online con varias personas
 La configuracion incluida permite desplegar el frontend en Vercel y apuntarlo a un backend externo con:
 
 ```env
-LIFEPATH_SOCKET_URL=https://tu-backend
+LIFEPATH_SOCKET_URL=https://lifepath-backend-4lbj.onrender.com
 ```
 
 Guia completa:
