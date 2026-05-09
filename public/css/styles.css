@@ -668,6 +668,8 @@ select:focus {
 
 .option-button {
   position: relative;
+  --option-rgb: 0, 224, 138;
+  --option-rgb-soft: 102, 217, 232;
   width: 100%;
   min-height: 64px;
   padding: 14px 16px;
@@ -675,7 +677,7 @@ select:focus {
   text-align: left;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.095), rgba(255, 255, 255, 0.035)),
-    rgba(0, 224, 138, 0.03);
+    rgba(var(--option-rgb), 0.035);
   border: 1px solid rgba(255, 255, 255, 0.14);
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.08);
   overflow: hidden;
@@ -685,17 +687,17 @@ select:focus {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 16% 0%, rgba(0, 224, 138, 0.18), transparent 32%),
-    linear-gradient(90deg, rgba(0, 224, 138, 0.16), transparent 48%);
+  background: radial-gradient(circle at 0% 65%, rgba(var(--option-rgb), 0.1), transparent 32%),
+    linear-gradient(90deg, rgba(var(--option-rgb), 0.18), transparent 48%);
   opacity: 0.78;
   pointer-events: none;
 }
 
 .option-button:hover {
   background:
-    linear-gradient(135deg, rgba(0, 224, 138, 0.18), rgba(102, 217, 232, 0.1)),
+    linear-gradient(135deg, rgba(var(--option-rgb), 0.18), rgba(var(--option-rgb-soft), 0.1)),
     rgba(255, 255, 255, 0.08);
-  box-shadow: 0 18px 42px rgba(0, 224, 138, 0.18), 0 0 0 1px rgba(0, 224, 138, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 36px rgba(var(--option-rgb), 0.16), 0 0 0 1px rgba(var(--option-rgb), 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.12);
 }
 
 .option-button:disabled {
@@ -791,22 +793,32 @@ select:focus {
 }
 
 .stat-border-dinero {
+  --option-rgb: 0, 224, 138;
+  --option-rgb-soft: 102, 217, 232;
   border-color: rgba(0, 224, 138, 0.72);
 }
 
 .stat-border-vida {
+  --option-rgb: 102, 217, 232;
+  --option-rgb-soft: 0, 224, 138;
   border-color: rgba(102, 217, 232, 0.65);
 }
 
 .stat-border-carrera {
+  --option-rgb: 231, 111, 81;
+  --option-rgb-soft: 255, 140, 122;
   border-color: rgba(231, 111, 81, 0.65);
 }
 
 .stat-border-relaciones {
+  --option-rgb: 167, 243, 208;
+  --option-rgb-soft: 0, 224, 138;
   border-color: rgba(167, 243, 208, 0.65);
 }
 
 .stat-border-reputacion {
+  --option-rgb: 196, 167, 255;
+  --option-rgb-soft: 102, 217, 232;
   border-color: rgba(196, 167, 255, 0.65);
 }
 
