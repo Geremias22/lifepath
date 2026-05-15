@@ -53,7 +53,9 @@
               <span></span>
               <strong>Generando consecuencia...</strong>
             </div>
-            <button id="roll-button" type="button" class="roll-button hidden">Tirar dado</button>
+            <div id="roll-button-slot" class="action-slot">
+              <button id="roll-button" type="button" class="roll-button hidden">Tirar dado</button>
+            </div>
             <div id="options-grid" class="options-grid"></div>
             <p id="game-notice" class="notice" aria-live="polite"></p>
           </article>
@@ -62,7 +64,9 @@
             <h2>Resultado del turno</h2>
             <div id="results-list" class="result-list"></div>
             <div class="divider"></div>
-            <button id="next-turn-button" type="button">Siguiente turno</button>
+            <div id="next-turn-button-slot" class="action-slot">
+              <button id="next-turn-button" type="button" class="hidden">Siguiente turno</button>
+            </div>
           </section>
 
           <section id="final-panel" class="panel hidden">
@@ -92,6 +96,7 @@
 
     <button id="side-panel-toggle" class="side-panel-toggle" type="button" aria-controls="side-panel" aria-expanded="false" aria-label="Abrir panel de partida">☰</button>
     <div id="side-panel-backdrop" class="side-panel-backdrop hidden" aria-hidden="true"></div>
+    <div id="floating-action-dock" class="floating-action-dock" aria-live="polite"></div>
 
     <script src="/js/session.js"></script>
     <script src="/js/config.js"></script>

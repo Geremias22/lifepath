@@ -22,10 +22,14 @@ const gameNotice = document.querySelector("#game-notice");
 const sidePanel = document.querySelector("#side-panel");
 const sidePanelToggle = document.querySelector("#side-panel-toggle");
 const sidePanelBackdrop = document.querySelector("#side-panel-backdrop");
+const floatingActionDock = document.querySelector("#floating-action-dock");
+const rollButtonSlot = document.querySelector("#roll-button-slot");
+const nextTurnButtonSlot = document.querySelector("#next-turn-button-slot");
 const { socket, emitAck } = window.lifePathSocket;
 let currentRoom = null;
 let pendingAction = false;
 let diceThrowTimer = null;
+const mobileActionsQuery = window.matchMedia("(max-width: 820px)");
 
 const STAT_LABELS = {
   dinero: "Dinero",
@@ -219,6 +223,7 @@ function renderRoll(room) {
   finalPanel.classList.add("hidden");
   timelinePanel.classList.remove("hidden");
   rollButton.classList.toggle("hidden", !mine);
+  nextTurnButton.classList.add("hidden");
   rollButton.disabled = !mine || pendingAction || room.processingAction;
   rollButton.textContent = pendingAction || room.processingAction ? "Procesando..." : "Tirar dado";
   optionsGrid.innerHTML = "";
@@ -242,6 +247,7 @@ function renderDecision(room) {
   resultsPanel.classList.add("hidden");
   finalPanel.classList.add("hidden");
   rollButton.classList.add("hidden");
+  nextTurnButton.classList.add("hidden");
   diceDisplay.textContent = room.diceRoll || "-";
   setDiceValue(room.diceRoll);
   stopDiceThrow();
@@ -277,6 +283,7 @@ function renderResults(room) {
   resultsPanel.classList.remove("hidden");
   finalPanel.classList.add("hidden");
   rollButton.classList.add("hidden");
+  nextTurnButton.classList.remove("hidden");
   optionsGrid.innerHTML = "";
   diceDisplay.textContent = room.diceRoll || "-";
   setDiceValue(room.diceRoll);
@@ -330,6 +337,7 @@ function renderFinal(room) {
   finalPanel.classList.remove("hidden");
   timelinePanel.classList.remove("hidden");
   rollButton.classList.add("hidden");
+  nextTurnButton.classList.add("hidden");
   optionsGrid.innerHTML = "";
   diceDisplay.textContent = "-";
   setDiceValue(1);
@@ -356,6 +364,17 @@ function setSidePanelOpen(isOpen) {
   sidePanel.classList.toggle("is-open", isOpen);
   sidePanelToggle.setAttribute("aria-expanded", String(isOpen));
   sidePanelBackdrop.classList.toggle("hidden", !isOpen);
+}
+
+function placeActionButtons() {
+  if (mobileActionsQuery.matches) {
+    if (rollButton.parentElement !== floatingActionDock) floatingActionDock.appendChild(rollButton);
+    if (nextTurnButton.parentElement !== floatingActionDock) floatingActionDock.appendChild(nextTurnButton);
+    return;
+  }
+
+  if (rollButton.parentElement !== rollButtonSlot) rollButtonSlot.appendChild(rollButton);
+  if (nextTurnButton.parentElement !== nextTurnButtonSlot) nextTurnButtonSlot.appendChild(nextTurnButton);
 }
 
 function renderRoom(room) {
@@ -418,6 +437,9 @@ sidePanelBackdrop.addEventListener("click", () => {
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape") setSidePanelOpen(false);
 });
+
+mobileActionsQuery.addEventListener("change", placeActionButtons);
+placeActionButtons();
 
 rollButton.addEventListener("click", rollDice);
 

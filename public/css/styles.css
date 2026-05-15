@@ -626,6 +626,10 @@ select:focus {
   margin-top: 18px;
 }
 
+.action-slot {
+  width: 100%;
+}
+
 .event-card {
   padding: 26px;
 }
@@ -825,7 +829,8 @@ select:focus {
 }
 
 .side-panel-toggle,
-.side-panel-backdrop {
+.side-panel-backdrop,
+.floating-action-dock {
   display: none;
 }
 
@@ -847,12 +852,24 @@ select:focus {
     padding-bottom: 104px;
   }
 
-  .roll-button,
-  #next-turn-button {
+  .floating-action-dock {
     position: fixed;
     left: 50%;
     bottom: max(18px, env(safe-area-inset-bottom));
     z-index: 30;
+    display: grid;
+    width: min(360px, calc(100vw - 32px));
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+
+  .floating-action-dock:empty {
+    display: none;
+  }
+
+  .floating-action-dock .roll-button,
+  .floating-action-dock #next-turn-button {
+    position: relative;
     width: min(360px, calc(100vw - 32px));
     min-height: 54px;
     margin: 0;
@@ -861,17 +878,17 @@ select:focus {
       0 18px 48px rgba(0, 0, 0, 0.42),
       0 0 30px rgba(0, 224, 138, 0.24),
       inset 0 1px 0 rgba(255, 255, 255, 0.46);
-    transform: translateX(-50%);
+    pointer-events: auto;
   }
 
-  .roll-button:hover,
-  #next-turn-button:hover {
-    transform: translateX(-50%) translateY(-2px);
+  .floating-action-dock .roll-button:hover,
+  .floating-action-dock #next-turn-button:hover {
+    transform: translateY(-2px);
   }
 
-  .roll-button:disabled:hover,
-  #next-turn-button:disabled:hover {
-    transform: translateX(-50%);
+  .floating-action-dock .roll-button:disabled:hover,
+  .floating-action-dock #next-turn-button:disabled:hover {
+    transform: none;
   }
 
   .form-grid {
