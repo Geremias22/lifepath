@@ -76,6 +76,17 @@
         </div>
 
         <aside id="side-panel" class="stack side-panel" aria-label="Panel de partida">
+          <section class="avatar-panel">
+            <div class="avatar-header">
+              <h2>Tu personaje</h2>
+              <span id="avatar-state-label" class="pill">Cargando</span>
+            </div>
+            <div class="avatar-stage">
+              <canvas id="avatar-canvas" aria-label="Personaje 3D"></canvas>
+            </div>
+            <div id="avatar-traits" class="avatar-traits"></div>
+          </section>
+
           <section class="panel">
             <h2>Tus estadisticas</h2>
             <div id="stats-grid" class="stats-grid"></div>
@@ -101,5 +112,6 @@
     <script src="/js/session.js"></script>
     <script src="/js/config.js"></script>
     <script src="/js/socket-loader.js" data-entry="/js/game.js"></script>
+    <script type="module" src="/js/avatar3d.mjs"></script>
   </body>
 </html>

@@ -4,8 +4,9 @@
   "description": "LifePath, juego narrativo multijugador con salas en tiempo real.",
   "main": "src/server.js",
   "scripts": {
-    "build": "node scripts/write-public-config.js",
-    "check": "node -c src/server.js && node -c src/sockets/roomSocket.js && node -c src/game/gameEngine.js && node -c src/services/llmService.js && node -c public/js/socket-loader.js && node -c public/js/socket.js && node -c scripts/write-public-config.js",
+    "build": "node scripts/write-public-config.js && node scripts/copy-vendor.js",
+    "check": "node -c src/server.js && node -c src/sockets/roomSocket.js && node -c src/game/gameEngine.js && node -c src/services/llmService.js && node -c public/js/socket-loader.js && node -c public/js/socket.js && node -c scripts/write-public-config.js && node --check public/js/avatar3d.mjs",
+    "postinstall": "node scripts/copy-vendor.js",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js"
   },
@@ -17,7 +18,8 @@
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "socket.io": "^4.8.3"
+    "socket.io": "^4.8.3",
+    "three": "^0.184.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.14",

@@ -75,6 +75,11 @@ function renderStats(player) {
     .join("");
 }
 
+function renderAvatar(player) {
+  window.__lifePathAvatarPlayer = player;
+  window.dispatchEvent(new CustomEvent("lifepath:avatar-update", { detail: player }));
+}
+
 function renderBoard(room) {
   if (!room.board || room.board.length === 0) {
     boardGrid.innerHTML = "";
@@ -389,6 +394,7 @@ function renderRoom(room) {
   }
 
   renderStats(me);
+  renderAvatar(me);
   renderBoard(room);
   renderPlayers(room);
   renderTimeline(me);
