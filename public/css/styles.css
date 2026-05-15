@@ -257,7 +257,6 @@ select:focus {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 360px;
   gap: 20px;
-  padding-bottom: 92px;
 }
 
 .board-header {
@@ -627,33 +626,6 @@ select:focus {
   margin-top: 18px;
 }
 
-.roll-button,
-#next-turn-button {
-  position: fixed;
-  left: 50%;
-  bottom: max(18px, env(safe-area-inset-bottom));
-  z-index: 30;
-  width: min(360px, calc(100vw - 32px));
-  min-height: 54px;
-  margin: 0;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  box-shadow:
-    0 18px 48px rgba(0, 0, 0, 0.42),
-    0 0 30px rgba(0, 224, 138, 0.24),
-    inset 0 1px 0 rgba(255, 255, 255, 0.46);
-  transform: translateX(-50%);
-}
-
-.roll-button:hover,
-#next-turn-button:hover {
-  transform: translateX(-50%) translateY(-2px);
-}
-
-.roll-button:disabled:hover,
-#next-turn-button:disabled:hover {
-  transform: translateX(-50%);
-}
-
 .event-card {
   padding: 26px;
 }
@@ -873,6 +845,33 @@ select:focus {
 
   .game-layout {
     padding-bottom: 104px;
+  }
+
+  .roll-button,
+  #next-turn-button {
+    position: fixed;
+    left: 50%;
+    bottom: max(18px, env(safe-area-inset-bottom));
+    z-index: 30;
+    width: min(360px, calc(100vw - 32px));
+    min-height: 54px;
+    margin: 0;
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    box-shadow:
+      0 18px 48px rgba(0, 0, 0, 0.42),
+      0 0 30px rgba(0, 224, 138, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.46);
+    transform: translateX(-50%);
+  }
+
+  .roll-button:hover,
+  #next-turn-button:hover {
+    transform: translateX(-50%) translateY(-2px);
+  }
+
+  .roll-button:disabled:hover,
+  #next-turn-button:disabled:hover {
+    transform: translateX(-50%);
   }
 
   .form-grid {
