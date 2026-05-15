@@ -371,6 +371,13 @@ function setSidePanelOpen(isOpen) {
   sidePanel.classList.toggle("is-open", isOpen);
   sidePanelToggle.setAttribute("aria-expanded", String(isOpen));
   sidePanelBackdrop.classList.toggle("hidden", !isOpen);
+
+  if (isOpen) {
+    sidePanel.scrollTop = 0;
+    requestAnimationFrame(() => {
+      window.dispatchEvent(new Event("lifepath:avatar-resize"));
+    });
+  }
 }
 
 function placeActionButtons() {

@@ -29,9 +29,11 @@ const PALETTES = {
   },
 };
 
+const CAMERA_TARGET = new THREE.Vector3(0, 1.48, 0);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
-camera.position.set(0, 2.2, 7.2);
+camera.position.set(0, 1.72, 8.15);
+camera.lookAt(CAMERA_TARGET);
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -112,9 +114,12 @@ function getPalette(player) {
 
 function getTraits(player) {
   const state = player?.narrativeState || {};
+  const money = player?.stats?.dinero ?? 50;
   const timelineFlags = new Set((player?.timeline || []).map((item) => item.flag).filter(Boolean));
   const next = [];
 
+  if (money >= 65) next.push({ id: "money-high", label: money >= 82 ? "Forrado/a" : "Ahorros", type: "coins" });
+  if (money <= 30) next.push({ id: "money-low", label: "Bolsillo justo", type: "low-coins" });
   if (state.hasPartner || state.married) next.push({ id: "love", label: state.married ? "Casado/a" : "Relacion", type: "heart" });
   if (state.hasChildren) next.push({ id: "family", label: "Familia", type: "heart-small" });
   if (state.partyReputation > 0 || timelineFlags.has("wolf_legend") || timelineFlags.has("party_excess")) next.push({ id: "party", label: "Fiestero", type: "drink" });
@@ -166,6 +171,32 @@ function addBriefcase(isNeon = false) {
   const color = isNeon ? 0x00e08a : 0x5b3b21;
   box([0.55, 0.36, 0.16], color, [-1.08, 0.24, 0.06], [0.05, 0, 0.12]);
   torus(0.16, 0.025, isNeon ? 0xa7f3d0 : 0x24150a, [-1.08, 0.48, 0.06], [Math.PI / 2, 0, 0]);
+}
+
+function addCoins(isLow = false) {
+  const coinColor = isLow ? 0x9a6b1a : 0xf4c542;
+  const shineColor = isLow ? 0x6f4510 : 0xffe58a;
+  const coinMat = material(coinColor, isLow ? 0x1b0f02 : 0x4d3300, 0.24, 0.28);
+  const stackX = 0.98;
+
+  for (let index = 0; index < (isLow ? 2 : 5); index += 1) {
+    const coin = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.045, 32), coinMat);
+    coin.position.set(stackX, -0.22 + index * 0.046, 0.22);
+    coin.rotation.set(Math.PI / 2, 0, 0.08);
+    add(coin);
+  }
+
+  if (!isLow) {
+    for (let index = 0; index < 3; index += 1) {
+      const coin = new THREE.Mesh(new THREE.CylinderGeometry(0.105, 0.105, 0.03, 32), coinMat);
+      coin.position.set(-0.48 + index * 0.28, 1.72 + Math.sin(index) * 0.08, 0.58);
+      coin.rotation.set(Math.PI / 2, 0.15, index * 0.5);
+      add(coin);
+      sphere(0.018, shineColor, [coin.position.x + 0.02, coin.position.y + 0.02, coin.position.z + 0.02]);
+    }
+  } else {
+    box([0.32, 0.03, 0.03], 0xff8c7a, [stackX, 0.03, 0.28], [0, 0, 0.72]);
+  }
 }
 
 function addSmoke() {
@@ -250,6 +281,8 @@ function buildAvatar(player) {
     if (trait.type === "drink") addDrink();
     if (trait.type === "glasses") addGlasses();
     if (trait.type === "briefcase") addBriefcase(false);
+    if (trait.type === "coins") addCoins(false);
+    if (trait.type === "low-coins") addCoins(true);
     if (trait.type === "smoke") addSmoke();
     if (trait.type === "spark") addSpark();
     if (trait.type === "neon-case") addBriefcase(true);
@@ -269,13 +302,14 @@ function resize() {
   renderer.setSize(width, height, false);
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
+  camera.lookAt(CAMERA_TARGET);
 }
 
 function animate(time) {
   requestAnimationFrame(animate);
   const t = time * 0.001;
   root.rotation.y = Math.sin(t * 0.55) * 0.22;
-  root.position.y = Math.sin(t * 1.8) * 0.035;
+  root.position.y = 0.18 + Math.sin(t * 1.8) * 0.03;
   root.children.forEach((child, index) => {
     if (child.geometry?.type === "TorusGeometry") {
       child.rotation.z += 0.0025 + index * 0.00008;
@@ -289,6 +323,9 @@ window.addEventListener("lifepath:avatar-update", (event) => {
 });
 
 window.addEventListener("resize", resize);
+window.addEventListener("lifepath:avatar-resize", () => {
+  requestAnimationFrame(resize);
+});
 resize();
 buildAvatar(window.__lifePathAvatarPlayer || window.lifePathSession?.get?.() || { gender: "otro", genderLabel: "Otro" });
 requestAnimationFrame(animate);
