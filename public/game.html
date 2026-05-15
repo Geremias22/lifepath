@@ -71,7 +71,7 @@
           </section>
         </div>
 
-        <aside class="stack">
+        <aside id="side-panel" class="stack side-panel" aria-label="Panel de partida">
           <section class="panel">
             <h2>Tus estadisticas</h2>
             <div id="stats-grid" class="stats-grid"></div>
@@ -89,6 +89,9 @@
         </aside>
       </section>
     </main>
+
+    <button id="side-panel-toggle" class="side-panel-toggle" type="button" aria-controls="side-panel" aria-expanded="false" aria-label="Abrir panel de partida">☰</button>
+    <div id="side-panel-backdrop" class="side-panel-backdrop hidden" aria-hidden="true"></div>
 
     <script src="/js/session.js"></script>
     <script src="/js/config.js"></script>

@@ -257,6 +257,7 @@ select:focus {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 360px;
   gap: 20px;
+  padding-bottom: 92px;
 }
 
 .board-header {
@@ -626,6 +627,33 @@ select:focus {
   margin-top: 18px;
 }
 
+.roll-button,
+#next-turn-button {
+  position: fixed;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  z-index: 30;
+  width: min(360px, calc(100vw - 32px));
+  min-height: 54px;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.42),
+    0 0 30px rgba(0, 224, 138, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.46);
+  transform: translateX(-50%);
+}
+
+.roll-button:hover,
+#next-turn-button:hover {
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.roll-button:disabled:hover,
+#next-turn-button:disabled:hover {
+  transform: translateX(-50%);
+}
+
 .event-card {
   padding: 26px;
 }
@@ -824,14 +852,27 @@ select:focus {
   border-color: rgba(196, 167, 255, 0.65);
 }
 
+.side-panel-toggle,
+.side-panel-backdrop {
+  display: none;
+}
+
 .hidden {
   display: none !important;
 }
 
 @media (max-width: 820px) {
+  body {
+    overflow-x: hidden;
+  }
+
   .layout,
   .game-layout {
     grid-template-columns: 1fr;
+  }
+
+  .game-layout {
+    padding-bottom: 104px;
   }
 
   .form-grid {
@@ -863,6 +904,62 @@ select:focus {
     justify-content: space-between;
     min-height: 118px;
     overflow: visible;
+  }
+
+  .side-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    width: min(390px, 88vw);
+    padding: 18px;
+    overflow-y: auto;
+    background:
+      radial-gradient(circle at 10% 0%, rgba(0, 224, 138, 0.16), transparent 180px),
+      linear-gradient(180deg, rgba(24, 26, 32, 0.98), rgba(12, 15, 20, 0.98));
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: -22px 0 54px rgba(0, 0, 0, 0.42);
+    transform: translateX(108%);
+    transition: transform 220ms ease;
+  }
+
+  .side-panel.is-open {
+    transform: translateX(0);
+  }
+
+  .side-panel .panel {
+    padding: 18px;
+    box-shadow: none;
+  }
+
+  .side-panel-toggle {
+    position: fixed;
+    right: 14px;
+    bottom: calc(max(18px, env(safe-area-inset-bottom)) + 70px);
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    min-height: 52px;
+    padding: 0;
+    border-radius: 50%;
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  .side-panel-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 45;
+    display: block;
+    background: rgba(0, 0, 0, 0.48);
+    backdrop-filter: blur(3px);
+  }
+
+  .side-panel-backdrop.hidden {
+    display: none !important;
   }
 }
 

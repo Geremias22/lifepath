@@ -19,6 +19,9 @@ const finalList = document.querySelector("#final-list");
 const timelinePanel = document.querySelector("#timeline-panel");
 const timelineList = document.querySelector("#timeline-list");
 const gameNotice = document.querySelector("#game-notice");
+const sidePanel = document.querySelector("#side-panel");
+const sidePanelToggle = document.querySelector("#side-panel-toggle");
+const sidePanelBackdrop = document.querySelector("#side-panel-backdrop");
 const { socket, emitAck } = window.lifePathSocket;
 let currentRoom = null;
 let pendingAction = false;
@@ -349,6 +352,12 @@ function renderFinal(room) {
     .join("");
 }
 
+function setSidePanelOpen(isOpen) {
+  sidePanel.classList.toggle("is-open", isOpen);
+  sidePanelToggle.setAttribute("aria-expanded", String(isOpen));
+  sidePanelBackdrop.classList.toggle("hidden", !isOpen);
+}
+
 function renderRoom(room) {
   currentRoom = room;
   const me = getMe(room);
@@ -397,6 +406,18 @@ async function joinCurrentRoom() {
 
   renderRoom(response.room);
 }
+
+sidePanelToggle.addEventListener("click", () => {
+  setSidePanelOpen(!sidePanel.classList.contains("is-open"));
+});
+
+sidePanelBackdrop.addEventListener("click", () => {
+  setSidePanelOpen(false);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") setSidePanelOpen(false);
+});
 
 rollButton.addEventListener("click", rollDice);
 
