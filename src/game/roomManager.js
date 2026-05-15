@@ -153,13 +153,24 @@ function getRoom(roomId) {
 }
 
 function markDisconnected(socketId) {
+  const affectedRooms = [];
+
   for (const room of rooms.values()) {
+    let roomChanged = false;
+
     for (const player of room.players.values()) {
       if (player.socketId === socketId) {
         player.connected = false;
+        roomChanged = true;
       }
     }
+
+    if (roomChanged) {
+      affectedRooms.push(room);
+    }
   }
+
+  return affectedRooms;
 }
 
 module.exports = {

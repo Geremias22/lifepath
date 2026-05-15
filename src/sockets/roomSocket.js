@@ -92,7 +92,10 @@ function registerRoomSocket(io) {
     });
 
     socket.on("disconnect", () => {
-      roomManager.markDisconnected(socket.id);
+      const affectedRooms = roomManager.markDisconnected(socket.id);
+      for (const room of affectedRooms) {
+        emitRoom(io, room);
+      }
     });
   });
 }

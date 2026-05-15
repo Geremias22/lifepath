@@ -5,6 +5,7 @@ const startButton = document.querySelector("#start-button");
 const copyButton = document.querySelector("#copy-button");
 const { socket, emitAck } = window.lifePathSocket;
 let currentRoom = null;
+let rejoiningRoom = false;
 
 function getRoomId() {
   const params = new URLSearchParams(window.location.search);
@@ -31,6 +32,9 @@ function renderRoom(room) {
 }
 
 async function joinCurrentRoom() {
+  if (rejoiningRoom) return;
+  rejoiningRoom = true;
+
   const session = window.lifePathSession.get();
   const roomId = getRoomId();
 
@@ -46,12 +50,20 @@ async function joinCurrentRoom() {
     gender: session.gender || "otro",
   });
 
+  rejoiningRoom = false;
+
   if (!response.ok) {
     lobbyNotice.textContent = response.error;
     return;
   }
 
   window.lifePathSession.update({ roomId: response.room.id });
+
+  if (response.room.status !== "waiting") {
+    window.location.href = `/game.html?room=${response.room.id}`;
+    return;
+  }
+
   renderRoom(response.room);
 }
 
@@ -79,6 +91,15 @@ socket.on("room:update", renderRoom);
 socket.on("game:started", (room) => {
   window.lifePathSession.update({ roomId: room.id });
   window.location.href = `/game.html?room=${room.id}`;
+});
+socket.on("connect", () => {
+  if (currentRoom) {
+    lobbyNotice.textContent = "Conexion recuperada. Sincronizando sala...";
+  }
+  joinCurrentRoom();
+});
+socket.on("disconnect", () => {
+  lobbyNotice.textContent = "Conexion perdida. Intentando reconectar...";
 });
 
 joinCurrentRoom();

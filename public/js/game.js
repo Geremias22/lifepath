@@ -29,6 +29,7 @@ const { socket, emitAck } = window.lifePathSocket;
 let currentRoom = null;
 let pendingAction = false;
 let diceThrowTimer = null;
+let rejoiningRoom = false;
 const mobileActionsQuery = window.matchMedia("(max-width: 820px)");
 
 const STAT_LABELS = {
@@ -403,6 +404,9 @@ function renderRoom(room) {
 }
 
 async function joinCurrentRoom() {
+  if (rejoiningRoom) return;
+  rejoiningRoom = true;
+
   const session = window.lifePathSession.get();
   const roomId = getRoomId();
 
@@ -418,11 +422,17 @@ async function joinCurrentRoom() {
     gender: session.gender || "otro",
   });
 
+  rejoiningRoom = false;
+
   if (!response.ok) {
     gameNotice.textContent = response.error;
     return;
   }
 
+  pendingAction = false;
+  stopDiceThrow();
+  setActionLoading(false);
+  window.lifePathSession.update({ roomId: response.room.id });
   renderRoom(response.room);
 }
 
@@ -470,5 +480,14 @@ nextTurnButton.addEventListener("click", async () => {
 socket.on("room:update", renderRoom);
 socket.on("game:turn-started", renderRoom);
 socket.on("game:finished", renderRoom);
+socket.on("connect", () => {
+  if (currentRoom) {
+    gameNotice.textContent = "Conexion recuperada. Sincronizando sala...";
+  }
+  joinCurrentRoom();
+});
+socket.on("disconnect", () => {
+  gameNotice.textContent = "Conexion perdida. Intentando reconectar...";
+});
 
 joinCurrentRoom();
