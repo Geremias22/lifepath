@@ -135,6 +135,7 @@ function renderPlayers(room) {
     .map((player) => {
       const badges = [
         player.id === activePlayer?.id ? '<span class="badge">Turno</span>' : "",
+        player.connected ? "" : '<span class="badge offline">Offline</span>',
         player.finished ? '<span class="badge done">Meta</span>' : "",
       ].join("");
 
@@ -425,7 +426,9 @@ async function joinCurrentRoom() {
   rejoiningRoom = false;
 
   if (!response.ok) {
-    gameNotice.textContent = response.error;
+    if (currentRoom) {
+      gameNotice.textContent = response.error;
+    }
     return;
   }
 
@@ -481,13 +484,15 @@ socket.on("room:update", renderRoom);
 socket.on("game:turn-started", renderRoom);
 socket.on("game:finished", renderRoom);
 socket.on("connect", () => {
-  if (currentRoom) {
+  if (currentRoom && currentRoom.status !== "waiting") {
     gameNotice.textContent = "Conexion recuperada. Sincronizando sala...";
+    joinCurrentRoom();
   }
-  joinCurrentRoom();
 });
 socket.on("disconnect", () => {
-  gameNotice.textContent = "Conexion perdida. Intentando reconectar...";
+  if (currentRoom && currentRoom.status !== "waiting") {
+    gameNotice.textContent = "Conexion perdida. Intentando reconectar...";
+  }
 });
 
 joinCurrentRoom();

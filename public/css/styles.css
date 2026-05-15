@@ -798,6 +798,11 @@ select:focus {
   background: var(--accent);
 }
 
+.offline {
+  color: #24110e;
+  background: var(--danger);
+}
+
 .stat-border-dinero {
   --option-rgb: 244, 197, 66;
   --option-rgb-soft: 184, 135, 24;

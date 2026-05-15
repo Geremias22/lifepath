@@ -53,7 +53,9 @@ async function joinCurrentRoom() {
   rejoiningRoom = false;
 
   if (!response.ok) {
-    lobbyNotice.textContent = response.error;
+    if (currentRoom) {
+      lobbyNotice.textContent = response.error;
+    }
     return;
   }
 
@@ -94,12 +96,9 @@ socket.on("game:started", (room) => {
 });
 socket.on("connect", () => {
   if (currentRoom) {
-    lobbyNotice.textContent = "Conexion recuperada. Sincronizando sala...";
+    joinCurrentRoom();
   }
-  joinCurrentRoom();
 });
-socket.on("disconnect", () => {
-  lobbyNotice.textContent = "Conexion perdida. Intentando reconectar...";
-});
+socket.on("disconnect", () => {});
 
 joinCurrentRoom();
