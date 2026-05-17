@@ -1,4 +1,5 @@
 import * as THREE from "/vendor/three.module.js";
+import { GLTFLoader } from "/vendor/examples/jsm/loaders/GLTFLoader.js";
 
 const canvas = document.querySelector("#avatar-canvas");
 const label = document.querySelector("#avatar-state-label");
@@ -29,15 +30,16 @@ const PALETTES = {
   },
 };
 
-const CAMERA_TARGET = new THREE.Vector3(0, 1.48, 0);
+const CAMERA_TARGET = new THREE.Vector3(0, 1.24, 0);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
-camera.position.set(0, 1.72, 8.15);
+camera.position.set(0, 1.45, 8.65);
 camera.lookAt(CAMERA_TARGET);
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
 renderer.setClearColor(0x000000, 0);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
 
 const root = new THREE.Group();
 scene.add(root);
@@ -54,6 +56,23 @@ scene.add(new THREE.HemisphereLight(0xdffff4, 0x101014, 1.7));
 
 let currentPlayer = null;
 let currentTraits = [];
+let kitTemplate = null;
+
+const KIT_MODEL_URL = "/assets/characters/lifepath-character-kit.glb";
+const MODEL_Y_OFFSET = -2.0;
+const BASE_BODY_NAMES = new Set(["head_big_round", "body_one_piece_soft_silhouette"]);
+const SHADOW_NAMES = new Set(["soft_floor_contact_shadow"]);
+const ACCESSORY_MATCHERS = {
+  heart: ["accessory_relationship_heart"],
+  "heart-small": ["accessory_family_heart"],
+  drink: ["accessory_cubata", "accessory_wolf_ticket"],
+  glasses: ["accessory_glasses"],
+  briefcase: ["accessory_work_briefcase"],
+  "neon-case": ["accessory_work_briefcase", "accessory_wolf_ticket"],
+  coins: ["accessory_money_coin", "accessory_money_bill"],
+  "low-coins": ["accessory_money_bill_1", "accessory_money_coin_1"],
+  smoke: ["accessory_joint", "accessory_smoke"],
+};
 
 function material(color, emissive = 0x000000, roughness = 0.5, metalness = 0.08) {
   return new THREE.MeshStandardMaterial({
@@ -101,9 +120,16 @@ function torus(radius, tube, color, position, rotation = [0, 0, 0], parent = roo
 function clearRoot() {
   while (root.children.length) {
     const child = root.children.pop();
+    const isModelClone = child.userData?.source === "lifepath-kit";
     child.traverse((node) => {
-      if (node.geometry) node.geometry.dispose();
-      if (node.material) node.material.dispose();
+      if (!isModelClone && node.geometry) node.geometry.dispose();
+      if (node.material) {
+        if (Array.isArray(node.material)) {
+          node.material.forEach((item) => item.dispose());
+        } else {
+          node.material.dispose();
+        }
+      }
     });
   }
 }
@@ -263,6 +289,99 @@ function buildBase(player) {
   add(aura);
 }
 
+function cloneKitScene() {
+  const clone = kitTemplate.clone(true);
+  clone.userData.source = "lifepath-kit";
+  clone.traverse((node) => {
+    node.userData.source = "lifepath-kit";
+    if (node.isMesh && node.material) {
+      node.material = Array.isArray(node.material)
+        ? node.material.map((item) => item.clone())
+        : node.material.clone();
+      node.castShadow = true;
+      node.receiveShadow = true;
+    }
+  });
+  return clone;
+}
+
+function tintModelByGender(model, player) {
+  const palette = getPalette(player);
+  model.traverse((node) => {
+    if (!node.isMesh || !node.material) return;
+    const name = node.name || "";
+    if (SHADOW_NAMES.has(name)) {
+      node.material.transparent = true;
+      node.material.opacity = 0.38;
+      return;
+    }
+    if (!BASE_BODY_NAMES.has(name)) return;
+
+    const color = name.includes("head") ? palette.secondary : palette.primary;
+    node.material.color.setHex(color);
+    node.material.emissive?.setHex(palette.emissive);
+    if ("emissiveIntensity" in node.material) node.material.emissiveIntensity = 0.035;
+    node.material.roughness = 0.78;
+    node.material.metalness = 0.02;
+  });
+}
+
+function setAccessoryVisibility(model, activeTypes) {
+  const activeMatchers = new Set();
+  activeTypes.forEach((type) => {
+    (ACCESSORY_MATCHERS[type] || []).forEach((matcher) => activeMatchers.add(matcher));
+  });
+
+  model.traverse((node) => {
+    if (!node.name?.startsWith("accessory_")) return;
+    node.visible = [...activeMatchers].some((matcher) => node.name.startsWith(matcher));
+  });
+}
+
+function addModelAura(player) {
+  const palette = getPalette(player);
+  const aura = new THREE.Mesh(
+    new THREE.TorusGeometry(1.1, 0.018, 12, 96),
+    new THREE.MeshBasicMaterial({ color: palette.primary, transparent: true, opacity: 0.48 }),
+  );
+  aura.position.set(0, 1.06 + MODEL_Y_OFFSET + 0.58, -0.18);
+  aura.rotation.set(Math.PI / 2, 0, 0);
+  aura.userData.source = "lifepath-procedural";
+  add(aura);
+}
+
+function buildModelAvatar(player) {
+  const model = cloneKitScene();
+  tintModelByGender(model, player);
+  setAccessoryVisibility(model, new Set(currentTraits.map((trait) => trait.type)));
+  model.position.set(0, MODEL_Y_OFFSET, 0);
+  model.scale.setScalar(1.05);
+  root.add(model);
+  addModelAura(player);
+
+  currentTraits.forEach((trait) => {
+    if (trait.type === "spark") addSpark();
+    if (trait.type === "bolt") addBolt();
+  });
+}
+
+function buildFallbackAvatar(player) {
+  buildBase(player);
+  currentTraits.forEach((trait) => {
+    if (trait.type === "heart") createHeart([0.74, 2.2, 0.28], 0.18);
+    if (trait.type === "heart-small") createHeart([-0.76, 1.98, 0.28], 0.12);
+    if (trait.type === "drink") addDrink();
+    if (trait.type === "glasses") addGlasses();
+    if (trait.type === "briefcase") addBriefcase(false);
+    if (trait.type === "coins") addCoins(false);
+    if (trait.type === "low-coins") addCoins(true);
+    if (trait.type === "smoke") addSmoke();
+    if (trait.type === "spark") addSpark();
+    if (trait.type === "neon-case") addBriefcase(true);
+    if (trait.type === "bolt") addBolt();
+  });
+}
+
 function renderTraits() {
   traits.innerHTML = currentTraits.length
     ? currentTraits.map((trait) => `<span class="avatar-chip">${trait.label}</span>`).join("")
@@ -295,6 +414,23 @@ function buildAvatar(player) {
   renderTraits();
 }
 
+function buildAvatarWithKit(player) {
+  currentPlayer = player;
+  currentTraits = getTraits(player);
+  clearRoot();
+
+  if (kitTemplate) {
+    buildModelAvatar(player);
+  } else {
+    buildFallbackAvatar(player);
+  }
+
+  const palette = getPalette(player);
+  label.textContent = `${player?.genderLabel || "Otro"} - ${currentTraits.length || 0} rasgos`;
+  label.style.borderColor = `#${palette.primary.toString(16).padStart(6, "0")}`;
+  renderTraits();
+}
+
 function resize() {
   const bounds = canvas.parentElement.getBoundingClientRect();
   const width = Math.max(220, Math.floor(bounds.width));
@@ -318,8 +454,30 @@ function animate(time) {
   renderer.render(scene, camera);
 }
 
+function loadKitModel() {
+  const loader = new GLTFLoader();
+  loader.load(
+    KIT_MODEL_URL,
+    (gltf) => {
+      kitTemplate = gltf.scene;
+      kitTemplate.traverse((node) => {
+        if (node.isMesh) {
+          node.castShadow = true;
+          node.receiveShadow = true;
+        }
+      });
+      buildAvatarWithKit(currentPlayer || window.__lifePathAvatarPlayer || window.lifePathSession?.get?.() || { gender: "otro", genderLabel: "Otro" });
+    },
+    undefined,
+    (error) => {
+      console.warn("No se pudo cargar el modelo Blender de LifePath. Usando avatar local.", error);
+      buildAvatarWithKit(currentPlayer || window.__lifePathAvatarPlayer || window.lifePathSession?.get?.() || { gender: "otro", genderLabel: "Otro" });
+    },
+  );
+}
+
 window.addEventListener("lifepath:avatar-update", (event) => {
-  buildAvatar(event.detail);
+  buildAvatarWithKit(event.detail);
 });
 
 window.addEventListener("resize", resize);
@@ -327,5 +485,6 @@ window.addEventListener("lifepath:avatar-resize", () => {
   requestAnimationFrame(resize);
 });
 resize();
-buildAvatar(window.__lifePathAvatarPlayer || window.lifePathSession?.get?.() || { gender: "otro", genderLabel: "Otro" });
+buildAvatarWithKit(window.__lifePathAvatarPlayer || window.lifePathSession?.get?.() || { gender: "otro", genderLabel: "Otro" });
+loadKitModel();
 requestAnimationFrame(animate);

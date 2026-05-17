@@ -1,4 +1,5 @@
 const STAT_KEYS = ["dinero", "vida", "carrera", "relaciones", "reputacion"];
+const FINAL_BIO_MAX_WORDS = 75;
 const OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
 const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models";
 const {
@@ -30,6 +31,12 @@ function shouldGenerateConsequences() {
 
 function shouldGenerateFinals() {
   return process.env.LLM_GENERATE_FINALS === "true";
+}
+
+function limitWords(text, maxWords) {
+  const words = String(text || "").trim().split(/\s+/).filter(Boolean);
+  if (words.length <= maxWords) return words.join(" ");
+  return `${words.slice(0, maxWords).join(" ")}...`;
 }
 
 function formatEffects(effects) {
@@ -426,11 +433,12 @@ async function generateFinalSummary({ player, legacyScore }) {
     relaciones: "El corazon que nunca camino en soledad",
     reputacion: "La voz respetada que dejo huella",
   };
+  const fallbackBiography = `${player.name} llego al final del tablero tras ${player.timeline.length} decisiones. Su legado alcanza ${legacyScore} puntos y queda definido sobre todo por ${strongestStat}.`;
 
   if (!shouldGenerateFinals()) {
     return {
       title: titleByStat[strongestStat] || "Una vida dificil de resumir",
-      biography: `${player.name} llego al final del tablero tras ${player.timeline.length} decisiones. Su legado alcanza ${legacyScore} puntos y queda definido sobre todo por ${strongestStat}.`,
+      biography: limitWords(fallbackBiography, FINAL_BIO_MAX_WORDS),
     };
   }
 
@@ -462,13 +470,13 @@ async function generateFinalSummary({ player, legacyScore }) {
 
     return {
       title: String(result.title || titleByStat[strongestStat]).slice(0, 90),
-      biography: String(result.biography || "").slice(0, 600),
+      biography: limitWords(result.biography || fallbackBiography, FINAL_BIO_MAX_WORDS),
     };
   } catch (error) {
     console.warn(error.message);
     return {
       title: titleByStat[strongestStat] || "Una vida dificil de resumir",
-      biography: `${player.name} llego al final del tablero tras ${player.timeline.length} decisiones. Su legado alcanza ${legacyScore} puntos y queda definido sobre todo por ${strongestStat}.`,
+      biography: limitWords(fallbackBiography, FINAL_BIO_MAX_WORDS),
     };
   }
 }

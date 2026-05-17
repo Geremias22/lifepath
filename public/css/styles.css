@@ -256,7 +256,12 @@ select:focus {
 .game-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 360px;
+  align-items: start;
   gap: 20px;
+}
+
+.game-layout > .stack {
+  align-content: start;
 }
 
 .avatar-panel {
@@ -1030,6 +1035,7 @@ select:focus {
 
   .side-panel .avatar-panel {
     padding: 2px 0 12px;
+    overflow: visible;
   }
 
   .avatar-stage {

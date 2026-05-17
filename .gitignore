@@ -1,6 +1,8 @@
 node_modules/
 public/vendor/
 tmp/
+*.blend1
+*.blend@
 .env
 npm-debug.log*
 .DS_Store

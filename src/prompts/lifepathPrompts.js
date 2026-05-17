@@ -47,7 +47,9 @@ Maximo 2 frases.
 `;
 
 const FINAL_SUMMARY_RULES = `
-El final debe sentirse como una biografia distinta y recordable.
+El final debe sentirse como una resumida biografia distinta y recordable.
+Extension: maximo 75 palabras en la biografia. Idealmente 3 o 4 frases cortas.
+Evita parrafos largos, listas y explicaciones de puntos. Prioriza el arco vital y una imagen final potente.
 Ten en cuenta patrones:
 - dinero alto + relaciones bajas: exito material con coste personal;
 - carrera alta + vida baja: brillantez quemada por el ritmo;
